@@ -1,0 +1,16 @@
+{
+    "contents" : "## This code plots the log tons of PM2.5 produced in Baltimore City for each of\n## four Emission \"types\". It then fits a linear model to the results in each plot.\n## Finally, it prouces a table to validate results. \n\n## If needed, read data\nif(!exists(\"NEI\")){\n     NEI <- readRDS(\"./data/summarySCC_PM25.rds\")\n     SCC <- readRDS(\"./data/Source_Classification_Code.rds\")     \n}\nbaltEm<-subset(NEI,fips==\"24510\")\n\n# setting zeros to nominal value to ensure we can log below\nbaltEm$Emissions[baltEm$Emissions==0]=0.01\n\n## Begin ggplot() graph. Note: used log of emissions. \nlibrary(ggplot2)\ng<-ggplot(baltEm,aes(year,log(Emissions)))\n\n## Output graph\npng(file=\"plot3.png\")\ng+geom_point()+facet_grid(.~type)+geom_smooth(method=\"lm\")+\n     labs(title=\"Emissions Change: Baltimore City: By Type\",\n          y=expression(\"log(\"*PM[2.5]*\") in Tons\"),\n          x=\"Year\")\ndev.off()\n\n## Validate results by calculating means for comparison.\nbaltEm<-split(baltEm,baltEm$type)\nas.data.frame(lapply(baltEm,function(x) \n     tapply(x$Emissions,x$year,mean,na.rm=T)))",
+    "created" : 1403286919466.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1761146601",
+    "id" : "66D096E",
+    "lastKnownWriteTime" : 1432342712,
+    "path" : "~/fine_particulate_matter/plot3.R",
+    "project_path" : "plot3.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

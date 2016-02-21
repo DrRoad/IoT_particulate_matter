@@ -1,0 +1,16 @@
+{
+    "contents" : "## This code plots tons of PM2.5 produced in Baltimore City for the years 1999, \n## 2002, 2005 and 2008. It then fits a linear model to show the trend.\n\n## If needed, read data\nif(!exists(\"NEI\")){\n     NEI <- readRDS(\"./data/summarySCC_PM25.rds\")\n     SCC <- readRDS(\"./data/Source_Classification_Code.rds\")     \n}\n## Calc total Baltimore emissions by year\nbaltEm<-with(subset(NEI,fips==\"24510\"),\n             tapply(Emissions,year,sum,na.rm=T))\n\n## Format years\nyears<-c(1999,2002,2005,2008)\n\n## Draw graph\npng(file=\"plot2.png\")\npar(mfrow=c(1,1),mar=c(5,5,4,2))\nplot(years,as.numeric(baltEm),pch=20,xlim=c(1999,2008),\n     xlab=\"Year\",ylab=expression(\"Tons of \"*PM[2.5]),\n     main=\"Emissions Change: Baltimore City: All Sources\")\n\n## Connect dots\nsegments(c(1999,2002,2005),baltEm[1:3],\n         c(2002,2005,2008),baltEm[2:4])\n\n## Fit a line\nmodel<-lm(as.numeric(baltEm)~years)\nabline(model,lwd=1,col=\"red\")\ndev.off()",
+    "created" : 1403286912771.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2140322127",
+    "id" : "7019CAC7",
+    "lastKnownWriteTime" : 1432342712,
+    "path" : "~/fine_particulate_matter/plot2.R",
+    "project_path" : "plot2.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

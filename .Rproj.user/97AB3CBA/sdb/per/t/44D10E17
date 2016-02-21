@@ -1,0 +1,16 @@
+{
+    "contents" : "## This code plots a base line graph showing tons (in 000's) of PM2.5 produced \n## for the years 1999, 2002, 2005 and 2008. \n\n## If needed, read data\nif(!exists(\"NEI\")){\n     NEI <- readRDS(\"./data/summarySCC_PM25.rds\")\n     SCC <- readRDS(\"./data/Source_Classification_Code.rds\")     \n}\n## Calc total emissions\ntotEm<-with(NEI,tapply(Emissions,year,sum,na.rm=T))\n\n## Format years\nyears<-c(1999,2002,2005,2008)\n\n## Draw graph\npng(file=\"plot1.png\")\npar(mar=c(5,5,4,2))\nplot(years,as.numeric(totEm)/1000,pch=20,xlim=c(1998,2009),\n     xlab=\"Year\",ylab=expression(\"000's of \"*PM[2.5]*\" Tons\"),\n     main=\"Emissions Change: U.S.: All Sources\")\n\n## Connect dots\nsegments(c(1999,2002,2005),totEm[1:3]/1000,\n         c(2002,2005,2008),totEm[2:4]/1000)\n\n## Fit a line\nmodel<-lm(as.numeric(totEm)~years)\nabline(model$coefficients[1]/1000,model$coefficients[2]/1000,lwd=1,col=\"red\")\ndev.off()",
+    "created" : 1403286865727.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "573463025",
+    "id" : "44D10E17",
+    "lastKnownWriteTime" : 1432342710,
+    "path" : "~/fine_particulate_matter/plot1.R",
+    "project_path" : "plot1.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
